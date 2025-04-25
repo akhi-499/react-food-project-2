@@ -112,6 +112,16 @@ function Cart(){
         }
     }
     
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return '';
+        if (imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        // Remove any leading slash if present
+        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
+    };
+    
     return(
         <div className="cart-bg">
             <Header />
@@ -136,7 +146,7 @@ function Cart(){
                                     <div key={cartItem.id} className="cart-main-body">
 
                                      <div className="cart-main-body-div">
-                                        <img src={cartItem.url}   alt={cartItem.title} onClick={()=>detail(cartItem.id)} /> 
+                                        <img src={getImageUrl(cartItem.url)}   alt={cartItem.title} onClick={()=>detail(cartItem.id)} /> 
                                      <div style={{paddingLeft:'5px'}}>
                                      <h3 >{cartItem.title}</h3>
                                      <button onClick={()=>remove(cartItem)}>Delete</button>

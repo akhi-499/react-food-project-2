@@ -51,6 +51,16 @@ function Indianfood(){
         history.push('/cart');
     }
 
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return '';
+        if (imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        // Remove any leading slash if present
+        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -63,7 +73,7 @@ function Indianfood(){
                     {  
                         foodItems.map((item) => (
                             <div key={item._id} className='Perslide'>
-                                <img src={item.image} alt={item.name} onClick={() => detail(item._id)} />
+                                <img src={getImageUrl(item.image)} alt={item.name} onClick={() => detail(item._id)} />
                                 <p>{item.name} [1 serve]</p>
                                 <span style={{display:'block'}}>₹{item.price}</span>
                                 <button className="slide-cart-button" onClick={order}>Order</button>

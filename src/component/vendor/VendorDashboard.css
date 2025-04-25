@@ -114,13 +114,26 @@
 
 .order-item {
   display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
 }
 
-.order-item:last-child {
-  border-bottom: none;
+.order-item-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.order-item-details span:first-child {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.order-item-details span:last-child {
+  color: #666;
 }
 
 .order-actions {

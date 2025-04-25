@@ -73,6 +73,16 @@ const AdminDashboard = () => {
     history.push("/admin/login");
   };
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    // Remove any leading slash if present
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
+  };
+
   if (loading) {
     return (
       <div className="admin-dashboard-container">
@@ -173,7 +183,7 @@ const AdminDashboard = () => {
               {foodItems.map((item) => (
                 <div key={item._id} className="food-item-card">
                   <div className="food-item-image">
-                    <img src={item.imageUrl} alt={item.name} />
+                    <img src={getImageUrl(item.image)} alt={item.name} />
                   </div>
                   <div className="food-item-details">
                     <h3>{item.name}</h3>

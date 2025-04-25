@@ -125,8 +125,10 @@ const VendorDashboard = () => {
                 <h4>Items:</h4>
                 {order.items.map((item, index) => (
                   <div key={index} className="order-item">
-                    <span>{item.name} x {item.quantity}</span>
-                    <span>₹{item.price * item.quantity}</span>
+                    <div className="order-item-details">
+                      <span>{item.name} x {item.quantity}</span>
+                      <span>₹{item.price * item.quantity}</span>
+                    </div>
                   </div>
                 ))}
               </div>

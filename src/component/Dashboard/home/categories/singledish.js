@@ -52,6 +52,16 @@ function Singledish() {
         history.push('/cart');
     }
     
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return '';
+        if (imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        // Remove any leading slash if present
+        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
+    };
+    
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -65,7 +75,7 @@ function Singledish() {
             <Header />
             <div className="sfp-main">
                 <div className="sfp-first">
-                    <img src={detail.image} alt={detail.name} />
+                    <img src={getImageUrl(detail.image)} alt={detail.name} />
                 </div>
                 <div className="spf-second">
                     <h1>{detail.name}</h1>

@@ -80,6 +80,16 @@ const MyOrders = () => {
         }
     };
 
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return '';
+        if (imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        // Remove any leading slash if present
+        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
+    };
+
     if (loading) {
         return (
             <Container className="my-orders-container">
@@ -139,7 +149,7 @@ const MyOrders = () => {
                                     <div className="order-items">
                                         {order.items.map((item) => (
                                             <div key={item.id} className="order-item">
-                                                <img src={item.image} alt={item.name} className="item-image" />
+                                                <img src={getImageUrl(item.image)} alt={item.name} className="item-image" />
                                                 <div className="item-details">
                                                     <h6>{item.name}</h6>
                                                     <p>Quantity: {item.quantity}</p>

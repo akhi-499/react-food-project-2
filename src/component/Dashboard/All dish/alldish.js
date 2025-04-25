@@ -62,10 +62,13 @@ function Alldish() {
     }
     
     const getImageUrl = (imagePath) => {
+        if (!imagePath) return '';
         if (imagePath.startsWith('http')) {
             return imagePath;
         }
-        return `https://react-food-project-2.onrender.com${imagePath}`;
+        // Remove any leading slash if present
+        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
     };
     
     if (loading) {
