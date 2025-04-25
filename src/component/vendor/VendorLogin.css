@@ -1,0 +1,133 @@
+.vendor-login-container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  min-height: 100vh;
+  padding: 80px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vendor-login-card {
+  width: 400px;
+  display: flex;
+  position: relative;
+  flex-flow: column;
+  margin: 40px auto;
+  justify-self: center;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.vendor-login-card h2 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 6px 0;
+  border: none;
+  border-bottom: 2px solid #e0e0e0;
+  background-color: transparent;
+  outline: none;
+  color: #333;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  caret-color: #3498db;
+}
+
+.login-button {
+  margin: 15px 0px !important;
+  height: 40px;
+  width: 100%;
+  align-self: center;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #2980b9;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+  transform: translateY(-1px);
+}
+
+.login-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.demo-credentials {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  text-align: center;
+  color: #666;
+}
+
+.demo-credentials p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.back-button {
+  margin: 15px 0px !important;
+  height: 40px;
+  width: 100%;
+  align-self: center;
+  background: transparent;
+  color: #3498db;
+  border: 2px solid #3498db;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .vendor-login-card {
+    width: 90%;
+    padding: 20px;
+  }
+} 
