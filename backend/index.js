@@ -40,6 +40,15 @@ const adminSchema = new mongoose.Schema({
 
 const Admin = mongoose.model("Admin", adminSchema);
 
+// Define Vendor Schema
+const vendorSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    name: { type: String, required: true }
+});
+
+const Vendor = mongoose.model("Vendor", vendorSchema);
+
 // ✅ Register API (Ensure password is hashed)
 const router = express.Router();
 
@@ -165,6 +174,64 @@ router.post("/api/admin/create", async (req, res) => {
     }
 });
 
+// Initialize vendor account
+const initializeVendor = async () => {
+    try {
+        console.log('Checking for vendor account...');
+        const existingVendor = await Vendor.findOne({ email: 'vendor@example.com' });
+        
+        if (!existingVendor) {
+            console.log('No vendor account found, creating default vendor...');
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash('vendor123', salt);
+            
+            const vendor = new Vendor({
+                email: 'vendor@example.com',
+                password: hashedPassword,
+                name: 'Default Vendor'
+            });
+            
+            await vendor.save();
+            console.log('Default vendor account created successfully');
+        } else {
+            console.log('Vendor account already exists');
+        }
+    } catch (error) {
+        console.error('Error initializing vendor account:', error);
+    }
+};
+
+// Vendor Login API
+router.post("/api/vendor/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Check if the vendor exists
+        const vendor = await Vendor.findOne({ email: email });
+        if (!vendor) {
+            return res.status(400).json({ message: "Vendor not found" });
+        }
+
+        // Compare hashed passwords
+        const isMatch = await bcrypt.compare(password, vendor.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        // Send vendor data without password
+        const vendorData = {
+            _id: vendor._id,
+            email: vendor.email,
+            name: vendor.name
+        };
+
+        res.status(200).json({ message: "Login successful", vendor: vendorData });
+    } catch (error) {
+        console.error("Vendor login error:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 // Import routes and pass the dbConnection
 const orderRoutes = require('./routes/orderRoutes')(mongoose);
 const foodItemRoutes = require('./routes/foodItemRoutes')(mongoose);
@@ -189,7 +256,7 @@ const initializeFoodItems = async () => {
                     name: 'Idly',
                     description: 'Soft and fluffy steamed rice cakes, a perfect healthy South Indian breakfast.',
                     price: 50,
-                    image: '/images/Indfood-1.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-1.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -198,7 +265,7 @@ const initializeFoodItems = async () => {
                     name: 'Dosa',
                     description: 'Crispy and golden rice crepe, served with chutney and sambar for a flavorful bite.',
                     price: 100,
-                    image: '/images/Indfood-2.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-2.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -207,7 +274,7 @@ const initializeFoodItems = async () => {
                     name: 'Puri',
                     description: 'Deep-fried, puffy Indian bread, best enjoyed with potato curry or chickpea masala.',
                     price: 100,
-                    image: '/images/Indfood-3.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-3.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -216,7 +283,7 @@ const initializeFoodItems = async () => {
                     name: 'Upma',
                     description: 'A warm and savory semolina dish, cooked with vegetables and spices for a comforting meal.',
                     price: 100,
-                    image: '/images/Indfood-4.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-4.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -225,7 +292,7 @@ const initializeFoodItems = async () => {
                     name: 'Dal Rice',
                     description: 'A comforting combination of lentil curry and steamed rice, packed with flavor and nutrition.',
                     price: 100,
-                    image: '/images/dal_rice.png',
+                    image: 'https://react-food-project-2.onrender.com/images/dal_rice.png',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId
@@ -234,7 +301,7 @@ const initializeFoodItems = async () => {
                     name: 'Fried Rice',
                     description: 'A delicious stir-fried rice dish with veggies, spices, and aromatic seasonings.',
                     price: 150,
-                    image: '/images/fried_rice.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/fried_rice.jpg',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId
@@ -243,7 +310,7 @@ const initializeFoodItems = async () => {
                     name: 'Roti Sabji',
                     description: 'Soft whole wheat flatbread served with a flavorful vegetable curry.',
                     price: 100,
-                    image: '/images/roti_sabji.jpeg',
+                    image: 'https://react-food-project-2.onrender.com/images/roti_sabji.jpeg',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId
@@ -252,7 +319,7 @@ const initializeFoodItems = async () => {
                     name: 'Pulav',
                     description: 'Fragrant and mildly spiced rice cooked with vegetables and aromatic spices.',
                     price: 175,
-                    image: '/images/pulao.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/pulao.jpg',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId
@@ -306,8 +373,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
 .then(() => {
     console.log("Successfully connected to MongoDB (test database)");
-    // Initialize food items and admin account after connection is established
-    return Promise.all([initializeFoodItems(), initializeAdmin()]);
+    // Initialize food items, admin account, and vendor account after connection is established
+    return Promise.all([initializeFoodItems(), initializeAdmin(), initializeVendor()]);
 })
 .catch(err => {
     console.error("Database connection error:", err);

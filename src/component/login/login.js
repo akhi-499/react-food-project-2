@@ -27,18 +27,20 @@ function Login() {
       });
 
       if (response.status === 200) {
-        // Store user data in session storage
         sessionStorage.setItem('user', JSON.stringify(response.data));
         toast.success("Login successful!");
         history.push("/home");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      if (error.response) {
-        toast.error(error.response.data.message || "Login failed");
-      } else {
-        toast.error("Server error. Please try again later.");
-      }
+      console.error('Login error:', {
+        message: error.message,
+        response: error.response ? {
+          status: error.response.status,
+          data: error.response.data
+        } : 'No response',
+        request: error.request ? 'Request made but no response' : 'No request made'
+      });
+      toast.error(error.response?.data?.message || "Server error. Please try again later.");
     } finally {
       setIsLoading(false);
     }

@@ -30,8 +30,16 @@ const AdminDashboard = () => {
       console.log("Fetched orders from test database:", response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      toast.error("Failed to load orders. Please try again later.");
+      console.error("Error fetching orders:", {
+        message: error.message,
+        response: error.response ? {
+          status: error.response.status,
+          data: error.response.data
+        } : 'No response',
+        request: error.request ? 'Request made but no response' : 'No request made'
+      });
+      toast.error("Failed to load orders: " + (error.response?.data?.message || error.message));
+      setOrders([]); // Reset orders on error
       setLoading(false);
     }
   };
@@ -49,7 +57,7 @@ const AdminDashboard = () => {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      await axios.patch(`https://react-food-project-2.onrender.com/api/orders/${orderId}`, {
+      await axios.patch(`https://react-food-project-2.onrender.com/api/orders/${orderId}/status`, {
         status: newStatus,
       });
       toast.success("Order status updated successfully");

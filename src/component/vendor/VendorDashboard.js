@@ -27,33 +27,27 @@ const VendorDashboard = () => {
       setLoading(true);
       console.log("Attempting to fetch orders from test database...");
       
-      // Add a timestamp to prevent caching issues
-      const response = await axios.get("https://react-food-project-2.onrender.com/api/orders/user/all", {
-        params: { _t: new Date().getTime() }
-      });
+      const response = await axios.get("https://react-food-project-2.onrender.com/api/orders/user/all");
       
       console.log("API Response:", response);
-      console.log("Response status:", response.status);
-      console.log("Response data:", response.data);
       
       if (response.data && Array.isArray(response.data)) {
         console.log(`Successfully fetched ${response.data.length} orders from test database`);
         setOrders(response.data);
       } else {
-        console.error("Invalid response format:", response.data);
-        toast.error("Received invalid data format from server");
+        throw new Error("Invalid response format received from server");
       }
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      console.error("Error details:", {
+      console.error("Error fetching orders:", {
         message: error.message,
         response: error.response ? {
           status: error.response.status,
           data: error.response.data
         } : 'No response',
-        request: error.request ? 'Request was made but no response received' : 'No request made'
+        request: error.request ? 'Request made but no response' : 'No request made'
       });
       toast.error(`Failed to load orders: ${error.message}`);
+      setOrders([]); // Reset orders on error
     } finally {
       setLoading(false);
     }
