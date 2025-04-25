@@ -1,16 +1,12 @@
 import axios from 'axios';
 
-const API_URL = process.env.NODE_ENV === 'production' 
-    ? process.env.REACT_APP_API_URL + '/orders'
-    : process.env.REACT_APP_LOCAL_API_URL + '/orders';
+const API_URL = 'https://react-food-project-2.onrender.com/api/orders';
 
 // Create a new order
 export const createOrder = async (orderData) => {
     try {
         console.log('Sending order data to API:', orderData);
-        const response = await axios.post(`${API_URL}/create`, orderData, {
-            withCredentials: true
-        });
+        const response = await axios.post(`${API_URL}/create`, orderData);
         console.log('Order creation response:', response.data);
         return response.data;
     } catch (error) {
@@ -23,9 +19,7 @@ export const createOrder = async (orderData) => {
 export const getUserOrders = async (userId) => {
     try {
         console.log('Fetching orders for user:', userId);
-        const response = await axios.get(`${API_URL}/user/${userId}`, {
-            withCredentials: true
-        });
+        const response = await axios.get(`${API_URL}/user/${userId}`);
         console.log('Fetched orders:', response.data);
         return response.data;
     } catch (error) {
@@ -38,9 +32,7 @@ export const getUserOrders = async (userId) => {
 export const getOrderById = async (orderId) => {
     try {
         console.log('Fetching order by ID:', orderId);
-        const response = await axios.get(`${API_URL}/${orderId}`, {
-            withCredentials: true
-        });
+        const response = await axios.get(`${API_URL}/${orderId}`);
         console.log('Fetched order:', response.data);
         return response.data;
     } catch (error) {
@@ -53,9 +45,7 @@ export const getOrderById = async (orderId) => {
 export const updateOrderStatus = async (orderId, status) => {
     try {
         console.log('Updating order status:', { orderId, status });
-        const response = await axios.patch(`${API_URL}/${orderId}/status`, { status }, {
-            withCredentials: true
-        });
+        const response = await axios.patch(`${API_URL}/${orderId}/status`, { status });
         console.log('Order status update response:', response.data);
         return response.data;
     } catch (error) {
@@ -70,9 +60,7 @@ export const deleteOrder = async (orderId) => {
         console.log('Deleting order with ID:', orderId);
         console.log('Delete request URL:', `${API_URL}/${orderId}`);
         
-        const response = await axios.delete(`${API_URL}/${orderId}`, {
-            withCredentials: true
-        });
+        const response = await axios.delete(`${API_URL}/${orderId}`);
         console.log('Order deletion response:', response.data);
         return response.data;
     } catch (error) {
