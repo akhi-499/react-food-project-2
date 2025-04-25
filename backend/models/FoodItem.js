@@ -13,11 +13,12 @@ const foodItemSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    image: {
-        type: String,
-        required: true
-    },
     category: {
+        type: String,
+        required: true,
+        enum: ['Breakfast', 'Lunch']
+    },
+    image: {
         type: String,
         required: true
     },
@@ -33,4 +34,4 @@ const foodItemSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = foodItemSchema; 
+module.exports = mongoose.model('FoodItem', foodItemSchema); 

@@ -239,104 +239,60 @@ const foodItemRoutes = require('./routes/foodItemRoutes')(mongoose);
 // Initialize food items
 const initializeFoodItems = async () => {
     try {
-        console.log('Starting food items initialization...');
-        const FoodItem = mongoose.model('FoodItem', require('./models/FoodItem'));
-        console.log('FoodItem model created');
-        
-        const existingItems = await FoodItem.find();
-        console.log('Existing items count:', existingItems.length);
-        
-        if (existingItems.length === 0) {
-            console.log('No existing items found, starting insertion...');
-            const vendorId = '65f1a1b1c4d5e6f7a8b9c0d1e';  // Hardcoded vendorId
-            console.log('Using vendorId:', vendorId);
-            
-            const foodItems = [
+        const count = await FoodItem.countDocuments();
+        if (count === 0) {
+            const defaultItems = [
                 {
-                    name: 'Idly',
-                    description: 'Soft and fluffy steamed rice cakes, a perfect healthy South Indian breakfast.',
-                    price: 50,
-                    image: 'https://react-food-project-2.onrender.com/images/Indfood-1.jpg',
+                    name: 'Idli',
+                    description: 'Soft and fluffy rice cakes served with sambar and chutney',
+                    price: 40,
                     category: 'Breakfast',
+                    image: '/images/Indfood-1.jpg',
                     isAvailable: true,
-                    vendorId: vendorId
+                    vendorId: 'vendor123'
                 },
                 {
                     name: 'Dosa',
-                    description: 'Crispy and golden rice crepe, served with chutney and sambar for a flavorful bite.',
-                    price: 100,
-                    image: 'https://react-food-project-2.onrender.com/images/Indfood-2.jpg',
+                    description: 'Crispy rice crepe served with sambar and chutney',
+                    price: 50,
                     category: 'Breakfast',
+                    image: '/images/Indfood-2.jpg',
                     isAvailable: true,
-                    vendorId: vendorId
+                    vendorId: 'vendor123'
                 },
                 {
-                    name: 'Puri',
-                    description: 'Deep-fried, puffy Indian bread, best enjoyed with potato curry or chickpea masala.',
-                    price: 100,
-                    image: 'https://react-food-project-2.onrender.com/images/Indfood-3.jpg',
+                    name: 'Vada',
+                    description: 'Crispy lentil donut served with sambar and chutney',
+                    price: 30,
                     category: 'Breakfast',
+                    image: '/images/Indfood-3.jpg',
                     isAvailable: true,
-                    vendorId: vendorId
+                    vendorId: 'vendor123'
                 },
                 {
-                    name: 'Upma',
-                    description: 'A warm and savory semolina dish, cooked with vegetables and spices for a comforting meal.',
-                    price: 100,
-                    image: 'https://react-food-project-2.onrender.com/images/Indfood-4.jpg',
-                    category: 'Breakfast',
-                    isAvailable: true,
-                    vendorId: vendorId
-                },
-                {
-                    name: 'Dal Rice',
-                    description: 'A comforting combination of lentil curry and steamed rice, packed with flavor and nutrition.',
-                    price: 100,
-                    image: 'https://react-food-project-2.onrender.com/images/dal_rice.png',
+                    name: 'Rice Plate',
+                    description: 'Steamed rice served with sambar, rasam, and curd',
+                    price: 80,
                     category: 'Lunch',
+                    image: '/images/Indfood-4.jpg',
                     isAvailable: true,
-                    vendorId: vendorId
+                    vendorId: 'vendor123'
                 },
                 {
-                    name: 'Fried Rice',
-                    description: 'A delicious stir-fried rice dish with veggies, spices, and aromatic seasonings.',
-                    price: 150,
-                    image: 'https://react-food-project-2.onrender.com/images/fried_rice.jpg',
+                    name: 'Biryani',
+                    description: 'Aromatic rice dish with spices and vegetables',
+                    price: 120,
                     category: 'Lunch',
+                    image: '/images/Indfood-5.jpg',
                     isAvailable: true,
-                    vendorId: vendorId
-                },
-                {
-                    name: 'Roti Sabji',
-                    description: 'Soft whole wheat flatbread served with a flavorful vegetable curry.',
-                    price: 100,
-                    image: 'https://react-food-project-2.onrender.com/images/roti_sabji.jpeg',
-                    category: 'Lunch',
-                    isAvailable: true,
-                    vendorId: vendorId
-                },
-                {
-                    name: 'Pulav',
-                    description: 'Fragrant and mildly spiced rice cooked with vegetables and aromatic spices.',
-                    price: 175,
-                    image: 'https://react-food-project-2.onrender.com/images/pulao.jpg',
-                    category: 'Lunch',
-                    isAvailable: true,
-                    vendorId: vendorId
+                    vendorId: 'vendor123'
                 }
             ];
-            
-            const result = await FoodItem.insertMany(foodItems);
-            console.log('Food items initialized successfully:', result.length, 'items inserted');
-        } else {
-            console.log('Food items already exist in the database');
+            await FoodItem.insertMany(defaultItems);
+            console.log('Default food items initialized');
         }
     } catch (error) {
         console.error('Error initializing food items:', error);
-        console.error('Error details:', error.message);
-        if (error.errors) {
-            console.error('Validation errors:', error.errors);
-        }
     }
 };
 
