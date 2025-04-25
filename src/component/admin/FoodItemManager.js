@@ -24,7 +24,7 @@ const FoodItemManager = () => {
   const fetchFoodItems = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/food-items');
+      const response = await axios.get('https://react-food-project-2.onrender.com/api/food-items');
       setFoodItems(response.data);
     } catch (error) {
       console.error('Error fetching food items:', error);
@@ -46,10 +46,10 @@ const FoodItemManager = () => {
     e.preventDefault();
     try {
       if (editingItem) {
-        await axios.patch(`http://localhost:5000/api/food-items/${editingItem._id}`, formData);
+        await axios.patch(`https://react-food-project-2.onrender.com/api/food-items/${editingItem._id}`, formData);
         toast.success('Food item updated successfully');
       } else {
-        await axios.post('http://localhost:5000/api/food-items', formData);
+        await axios.post('https://react-food-project-2.onrender.com/api/food-items', formData);
         toast.success('Food item added successfully');
       }
       fetchFoodItems();
@@ -75,7 +75,7 @@ const FoodItemManager = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this food item?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/food-items/${id}`);
+        await axios.delete(`https://react-food-project-2.onrender.com/api/food-items/${id}`);
         toast.success('Food item deleted successfully');
         fetchFoodItems();
       } catch (error) {
@@ -87,7 +87,7 @@ const FoodItemManager = () => {
 
   const handleToggleAvailability = async (id, currentStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/food-items/${id}`, {
+      await axios.patch(`https://react-food-project-2.onrender.com/api/food-items/${id}`, {
         isAvailable: !currentStatus
       });
       toast.success('Food item availability updated');

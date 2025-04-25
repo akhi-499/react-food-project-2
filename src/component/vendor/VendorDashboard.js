@@ -28,7 +28,7 @@ const VendorDashboard = () => {
       console.log("Attempting to fetch orders from foodOrderDB...");
       
       // Add a timestamp to prevent caching issues
-      const response = await axios.get("http://localhost:5000/api/orders/user/all", {
+      const response = await axios.get("https://react-food-project-2.onrender.com/api/orders/user/all", {
         params: { _t: new Date().getTime() }
       });
       
@@ -63,7 +63,7 @@ const VendorDashboard = () => {
     try {
       console.log(`Updating order ${orderId} status to ${newStatus}...`);
       
-      const response = await axios.patch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const response = await axios.patch(`https://react-food-project-2.onrender.com/api/orders/${orderId}/status`, {
         status: newStatus
       });
       

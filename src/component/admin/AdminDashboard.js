@@ -25,7 +25,7 @@ const AdminDashboard = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/orders/user/all");
+      const response = await axios.get("https://react-food-project-2.onrender.com/api/orders/user/all");
       console.log("Fetched orders from foodOrderDB:", response.data);
       setOrders(response.data);
       setLoading(false);
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
 
   const fetchFoodItems = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/food-items");
+      const response = await axios.get("https://react-food-project-2.onrender.com/api/food-items");
       console.log("Fetched food items from foodOrderDB:", response.data);
       setFoodItems(response.data);
     } catch (error) {
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/orders/${orderId}`, {
+      await axios.patch(`https://react-food-project-2.onrender.com/api/orders/${orderId}`, {
         status: newStatus,
       });
       toast.success("Order status updated successfully");

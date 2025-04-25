@@ -21,7 +21,7 @@ function Register() {
     if (!username || !email || !password) return;
 
     try {
-      const response = await axios.post("http://localhost:5000/register", {
+      const response = await axios.post("https://react-food-project-2.onrender.com/register", {
         username,
         email,
         password,

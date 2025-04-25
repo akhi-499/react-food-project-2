@@ -29,7 +29,7 @@ const AdminLogin = () => {
     try {
       console.log("Attempting admin login...");
       
-      const response = await axios.post("http://localhost:5000/api/admin/login", credentials);
+      const response = await axios.post("https://react-food-project-2.onrender.com/api/admin/login", credentials);
       
       console.log("Login response:", response);
       

@@ -6,10 +6,7 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors({ 
-    origin: [
-        "http://localhost:3000", 
-        "https://mini-project-ten-tan.vercel.app"  // Your actual Vercel domain
-    ], 
+    origin: "*",  // Allow all origins for now
     credentials: true 
 }));
 app.use(express.json());
@@ -25,18 +22,12 @@ if (!process.env.MONGODB_URI) {
 // Create two separate connections with simplified SSL configuration
 const authConnection = mongoose.createConnection(process.env.MONGODB_URI + "/authDB", {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true,
-    retryWrites: true,
-    w: 'majority'
+    useUnifiedTopology: true
 });
 
 const orderConnection = mongoose.createConnection(process.env.MONGODB_URI + "/foodOrderDB", {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true,
-    retryWrites: true,
-    w: 'majority'
+    useUnifiedTopology: true
 });
 
 // Handle authDB connection

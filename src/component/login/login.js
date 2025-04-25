@@ -21,7 +21,7 @@ function Login() {
 
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("https://react-food-project-2.onrender.com/login", {
         email: loginEmail,
         password: loginPassword,
       });
