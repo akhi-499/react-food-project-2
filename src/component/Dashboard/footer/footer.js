@@ -1,6 +1,6 @@
 import React from "react";
 import logo from '../image/vit.png'
-import Food from "../../foodimage";
+import Food from "../../../component/foodimage";
 import '../footer/footer.css'
 import { useHistory } from "react-router-dom";
 import insta from '../image/instagram.png'

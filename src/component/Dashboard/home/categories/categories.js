@@ -1,5 +1,5 @@
 import React from "react";
-import Food from "../../../foodimage";
+import Food from "../../../../component/foodimage";
 import '../categories/categories.css'
 import indian from '../../image/indianfood.jpg'
 import italian from '../../image/italianfood.jpg'

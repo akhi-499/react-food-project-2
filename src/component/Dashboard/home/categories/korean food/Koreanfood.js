@@ -1,6 +1,6 @@
 import React from "react";
 import '../categories.css';
-import Food from "../../../../foodimage";
+import Food from "../../../../../component/foodimage";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTocart } from "../../../cart/cartslice";

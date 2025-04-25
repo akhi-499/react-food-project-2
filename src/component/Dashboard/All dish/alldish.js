@@ -6,7 +6,7 @@ import Header from "../header/header";
 import { addTocart } from "../cart/cartslice";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotals } from "../cart/cartslice";
-import Food from "../../../component/foodimage";
+import Food from "../../../../component/foodimage";
 
 function Alldish() {
     const dispatch = useDispatch();
