@@ -2,23 +2,42 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
+require('dotenv').config();
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ 
+    origin: ["http://localhost:3000", "https://your-frontend-url.vercel.app"], 
+    credentials: true 
+}));
 app.use(express.json());
 
 // Connect to MongoDB with detailed error logging
 console.log("Attempting to connect to MongoDB...");
 
-// Create two separate connections
+if (!process.env.MONGODB_URI) {
+    console.error("MONGODB_URI is not defined in environment variables");
+    process.exit(1);
+}
+
+// Create two separate connections with SSL configuration
 const authConnection = mongoose.createConnection(process.env.MONGODB_URI + "/authDB", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    ssl: true,
+    retryWrites: true,
+    w: 'majority',
+    tlsAllowInvalidCertificates: false,
+    tlsAllowInvalidHostnames: false
 });
 
 const orderConnection = mongoose.createConnection(process.env.MONGODB_URI + "/foodOrderDB", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    ssl: true,
+    retryWrites: true,
+    w: 'majority',
+    tlsAllowInvalidCertificates: false,
+    tlsAllowInvalidHostnames: false
 });
 
 // Handle authDB connection
