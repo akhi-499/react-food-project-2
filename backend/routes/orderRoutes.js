@@ -3,9 +3,9 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const orderSchema = require('../models/Order');
 
-module.exports = (connection) => {
-    // Create the Order model using the provided connection
-    const Order = connection.model('Order', orderSchema);
+module.exports = (mongoose) => {
+    // Create the Order model using mongoose
+    const Order = mongoose.model('Order', orderSchema);
 
     // Create a new order
     router.post('/create', async (req, res) => {

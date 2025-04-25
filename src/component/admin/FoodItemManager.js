@@ -48,7 +48,7 @@ const FoodItemManager = () => {
       // Ensure image URL is absolute
       const imageUrl = formData.image.startsWith('http') 
         ? formData.image 
-        : `https://react-food-project-2.onrender.com/images/${formData.image.split('/').pop()}`;
+        : `https://react-food-project-2.onrender.com${formData.image}`;
 
       const updatedFormData = {
         ...formData,

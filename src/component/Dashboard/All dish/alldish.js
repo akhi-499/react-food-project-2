@@ -61,6 +61,13 @@ function Alldish() {
         }));
     }
     
+    const getImageUrl = (imagePath) => {
+        if (imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        return `https://react-food-project-2.onrender.com${imagePath}`;
+    };
+    
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -72,7 +79,7 @@ function Alldish() {
                 {detail.map((item) => (
                     <div key={item._id} className='Perslide'>
                         <img 
-                            src={item.image} 
+                            src={getImageUrl(item.image)} 
                             alt={item.name} 
                             onClick={() => detailed(item._id)}
                         />

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./VendorLogin.css";
 import "../register/register.css";
+import axios from "axios";
 
 const VendorLogin = () => {
   const [email, setEmail] = useState("");
@@ -16,19 +17,20 @@ const VendorLogin = () => {
     setLoading(true);
 
     try {
-      // For demo purposes, using hardcoded credentials
-      // In production, this should be replaced with actual API call
-      if (email === "vendor@example.com" && password === "vendor123") {
+      const response = await axios.post("https://react-food-project-2.onrender.com/api/vendor/login", {
+        email: email,
+        password: password
+      });
+
+      if (response.status === 200) {
         // Store vendor info in session storage
-        sessionStorage.setItem("vendorInfo", JSON.stringify({ email }));
+        sessionStorage.setItem("vendorInfo", JSON.stringify(response.data.vendor));
         toast.success("Login successful!");
         history.push("/vendor/dashboard");
-      } else {
-        toast.error("Invalid credentials");
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Login failed. Please try again.");
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

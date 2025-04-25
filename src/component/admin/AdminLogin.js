@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./AdminLogin.css";
 import "../register/register.css";
+import axios from "axios";
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({
@@ -26,18 +27,20 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      // Hardcoded admin credentials
-      if (credentials.email === "admin@example.com" && credentials.password === "admin123") {
+      const response = await axios.post("https://react-food-project-2.onrender.com/api/admin/login", {
+        email: credentials.email,
+        password: credentials.password
+      });
+
+      if (response.status === 200) {
         // Store admin info in session storage
-        sessionStorage.setItem("adminInfo", JSON.stringify({ email: credentials.email }));
+        sessionStorage.setItem("adminInfo", JSON.stringify(response.data.admin));
         toast.success("Login successful!");
         history.push("/admin/dashboard");
-      } else {
-        toast.error("Invalid credentials");
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Login failed. Please try again.");
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const foodItemSchema = require('../models/FoodItem');
 
-module.exports = (connection) => {
-    const FoodItem = connection.model('FoodItem', foodItemSchema);
+module.exports = (mongoose) => {
+    const FoodItem = mongoose.model('FoodItem', foodItemSchema);
 
     // Get all food items
     router.get('/', async (req, res) => {
