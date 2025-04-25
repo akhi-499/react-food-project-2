@@ -83,7 +83,12 @@ const MyOrders = () => {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '';
-        return imagePath; // Return the path as is since we're using static images
+        // If the path is already a full URL, return it as is
+        if (imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        // For static images, return the path as is
+        return imagePath;
     };
 
     if (loading) {
@@ -144,12 +149,16 @@ const MyOrders = () => {
                                 <Card.Body>
                                     <div className="order-items">
                                         {order.items.map((item) => (
-                                            <div key={item._id} className="order-item">
-                                                <img src={getImageUrl(item.url)} alt={item.title} className="item-image" />
+                                            <div key={item._id || item.id} className="order-item">
+                                                <img 
+                                                    src={getImageUrl(item.url || item.image)} 
+                                                    alt={item.title || item.name} 
+                                                    className="item-image"
+                                                />
                                                 <div className="item-details">
-                                                    <h6>{item.title}</h6>
+                                                    <h4>{item.title || item.name}</h4>
                                                     <p>Quantity: {item.quantity}</p>
-                                                    <p>Price: ₹{item.rate}</p>
+                                                    <p>Price: ₹{item.rate || item.price}</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -161,7 +170,7 @@ const MyOrders = () => {
                                         </div>
                                         <div className="d-flex justify-content-between">
                                             <span>Order Date:</span>
-                                            <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                                            <span>{new Date(order.createdAt || order.orderDate).toLocaleDateString()}</span>
                                         </div>
                                     </div>
                                 </Card.Body>
