@@ -180,6 +180,104 @@ router.post("/api/admin/create", async (req, res) => {
 const orderRoutes = require('./routes/orderRoutes')(dbConnection);
 const foodItemRoutes = require('./routes/foodItemRoutes')(dbConnection);
 
+// Initialize food items
+const initializeFoodItems = async () => {
+    try {
+        const FoodItem = dbConnection.model('FoodItem', require('./models/FoodItem'));
+        const existingItems = await FoodItem.find();
+        
+        if (existingItems.length === 0) {
+            const foodItems = [
+                {
+                    name: 'Idly',
+                    description: 'Soft and fluffy steamed rice cakes, a perfect healthy South Indian breakfast.',
+                    price: 50,
+                    image: '/src/component/Dashboard/image/Indfood-1.jpg',
+                    category: 'Breakfast',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                },
+                {
+                    name: 'Dosa',
+                    description: 'Crispy and golden rice crepe, served with chutney and sambar for a flavorful bite.',
+                    price: 100,
+                    image: '/src/component/Dashboard/image/Indfood-2.jpg',
+                    category: 'Breakfast',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                },
+                {
+                    name: 'Puri',
+                    description: 'Deep-fried, puffy Indian bread, best enjoyed with potato curry or chickpea masala.',
+                    price: 100,
+                    image: '/src/component/Dashboard/image/Indfood-3.jpg',
+                    category: 'Breakfast',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                },
+                {
+                    name: 'Upma',
+                    description: 'A warm and savory semolina dish, cooked with vegetables and spices for a comforting meal.',
+                    price: 100,
+                    image: '/src/component/Dashboard/image/Indfood-4.jpg',
+                    category: 'Breakfast',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                },
+                {
+                    name: 'Dal Rice',
+                    description: 'A comforting combination of lentil curry and steamed rice, packed with flavor and nutrition.',
+                    price: 100,
+                    image: '/src/component/Dashboard/image/dal_rice.png',
+                    category: 'Lunch',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                },
+                {
+                    name: 'Fried Rice',
+                    description: 'A delicious stir-fried rice dish with veggies, spices, and aromatic seasonings.',
+                    price: 150,
+                    image: '/src/component/Dashboard/image/fried_rice.jpg',
+                    category: 'Lunch',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                },
+                {
+                    name: 'Roti Sabji',
+                    description: 'Soft whole wheat flatbread served with a flavorful vegetable curry.',
+                    price: 100,
+                    image: '/src/component/Dashboard/image/roti_sabji.jpeg',
+                    category: 'Lunch',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                },
+                {
+                    name: 'Pulav',
+                    description: 'Fragrant and mildly spiced rice cooked with vegetables and aromatic spices.',
+                    price: 175,
+                    image: '/src/component/Dashboard/image/pulao.jpg',
+                    category: 'Lunch',
+                    isAvailable: true,
+                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                }
+            ];
+            
+            await FoodItem.insertMany(foodItems);
+            console.log('Food items initialized successfully');
+        } else {
+            console.log('Food items already exist in the database');
+        }
+    } catch (error) {
+        console.error('Error initializing food items:', error);
+    }
+};
+
+// Call initializeFoodItems after database connection is established
+dbConnection.once('open', () => {
+    console.log('Connected to MongoDB');
+    initializeFoodItems();
+});
+
 // Use routes
 app.use("/", router);
 app.use("/api/orders", orderRoutes);
