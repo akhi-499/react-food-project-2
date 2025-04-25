@@ -3,6 +3,7 @@ const router = express.Router();
 const foodItemSchema = require('../models/FoodItem');
 
 module.exports = (mongoose) => {
+    // Create the FoodItem model using the schema
     const FoodItem = mongoose.model('FoodItem', foodItemSchema);
 
     // Get all food items
