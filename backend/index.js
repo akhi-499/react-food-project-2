@@ -19,51 +19,37 @@ if (!process.env.MONGODB_URI) {
     process.exit(1);
 }
 
-// Create two separate connections with simplified SSL configuration
-const authConnection = mongoose.createConnection(process.env.MONGODB_URI + "/authDB", {
+// Create a single connection to the test database
+const dbConnection = mongoose.createConnection(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
-const orderConnection = mongoose.createConnection(process.env.MONGODB_URI + "/foodOrderDB", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+// Handle database connection
+dbConnection.on('connected', () => {
+    console.log("Successfully connected to MongoDB (test database)");
 });
 
-// Handle authDB connection
-authConnection.on('connected', () => {
-    console.log("Successfully connected to MongoDB (authDB)");
+dbConnection.on('error', (err) => {
+    console.error("Database connection error:", err);
 });
 
-authConnection.on('error', (err) => {
-    console.error("AuthDB connection error:", err);
-});
-
-// Handle foodOrderDB connection
-orderConnection.on('connected', () => {
-    console.log("Successfully connected to MongoDB (foodOrderDB)");
-});
-
-orderConnection.on('error', (err) => {
-    console.error("FoodOrderDB connection error:", err);
-});
-
-// Define User Schema using authConnection
+// Define User Schema
 const userSchema = new mongoose.Schema({
     username: String,
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // Store hashed password
 });
 
-const User = authConnection.model("User", userSchema);
+const User = dbConnection.model("User", userSchema);
 
-// Define Admin Schema using authConnection
+// Define Admin Schema
 const adminSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // Store hashed password
 });
 
-const Admin = authConnection.model("Admin", adminSchema);
+const Admin = dbConnection.model("Admin", adminSchema);
 
 // ✅ Register API (Ensure password is hashed)
 const router = express.Router();
@@ -190,12 +176,14 @@ router.post("/api/admin/create", async (req, res) => {
     }
 });
 
-// Import order routes and pass the orderConnection
-const orderRoutes = require('./routes/orderRoutes')(orderConnection);
+// Import routes and pass the dbConnection
+const orderRoutes = require('./routes/orderRoutes')(dbConnection);
+const foodItemRoutes = require('./routes/foodItemRoutes')(dbConnection);
 
 // Use routes
 app.use("/", router);
 app.use("/api/orders", orderRoutes);
+app.use("/api/food-items", foodItemRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

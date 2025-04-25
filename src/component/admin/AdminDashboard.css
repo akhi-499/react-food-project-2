@@ -288,12 +288,17 @@
 }
 
 .toggle-button {
-  background-color: #ffc107;
-  color: #212529;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .toggle-button:hover {
-  background-color: #e0a800;
+  background-color: #1976D2;
 }
 
 .delete-button {
@@ -392,16 +397,23 @@
 }
 
 .food-item-status {
-  margin-top: 10px;
+  margin: 10px 0;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.9em;
+  font-weight: 500;
 }
 
 .status-badge.available {
-  background-color: #2ecc71;
+  background-color: #4CAF50;
   color: white;
 }
 
 .status-badge.unavailable {
-  background-color: #e74c3c;
+  background-color: #f44336;
   color: white;
 }
 

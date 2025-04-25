@@ -5,11 +5,17 @@ const initialState={
     cartTotalQUantity:0,
     totalAmount:0
 }
+
 const cartslice=createSlice({
     name:'cart',
     initialState,
     reducers:{
         addTocart(state,action){
+            // Check if item is available
+            if (!action.payload.isAvailable) {
+                return; // Don't add unavailable items
+            }
+
             const itemIndex=state.cartItems.findIndex((ele)=>ele.id===action.payload.id);
             if(itemIndex>=0){
                 state.cartItems[itemIndex].cartQuantity+=1;
@@ -17,7 +23,6 @@ const cartslice=createSlice({
                 const temproduct={...action.payload,cartQuantity:1};
                 state.cartItems.push(temproduct);
             }
-            
         },
         removeCartItem(state,action){
            const newCart= state.cartItems.filter(
@@ -50,8 +55,20 @@ const cartslice=createSlice({
             state.totalAmount=total;
             state.cartTotalQUantity=quantity
         },
+        // Remove unavailable items from cart
+        removeUnavailableItems(state, action) {
+            state.cartItems = state.cartItems.filter(item => item.isAvailable);
+        }
     }
 })
 
-export const {addTocart,removeCartItem,decreaseCart,clearCartItem,getTotals} =cartslice.actions;
+export const {
+    addTocart,
+    removeCartItem,
+    decreaseCart,
+    clearCartItem,
+    getTotals,
+    removeUnavailableItems
+} = cartslice.actions;
+
 export default cartslice.reducer
