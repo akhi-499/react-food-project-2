@@ -3,7 +3,7 @@ import '../categories.css'
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTocart } from "../../../cart/cartslice";
-import axios from 'axios';
+import Food from "../../../../component/foodimage";
 
 function Italianfood(){
     const dispatch = useDispatch();
@@ -12,16 +12,16 @@ function Italianfood(){
     let history = useHistory();
 
     useEffect(() => {
-        fetchFoodItems();
+        loadFoodItems();
     }, []);
 
-    const fetchFoodItems = async () => {
+    const loadFoodItems = () => {
         try {
-            const response = await axios.get('https://react-food-project-2.onrender.com/api/food-items');
-            const lunchItems = response.data.filter(item => item.category === 'Lunch');
+            // Filter lunch items from static data
+            const lunchItems = Food.filter(item => item.titlename === 'Lunch');
             setFoodItems(lunchItems);
         } catch (error) {
-            console.error('Error fetching food items:', error);
+            console.error('Error loading food items:', error);
         } finally {
             setLoading(false);
         }
@@ -45,27 +45,17 @@ function Italianfood(){
     }
     function AddtoCart(item){
         dispatch(addTocart({
-            id: item._id,
-            title: item.name,
-            rate: item.price,
-            url: item.image,
-            quantity: '1 serve',
-            isAvailable: item.isAvailable
+            id: item.id,
+            title: item.title,
+            rate: item.rate,
+            url: item.url,
+            quantity: item.quantity,
+            isAvailable: true
         }));
     }
     function order(){
         history.push('/cart')
     }
-
-    const getImageUrl = (imagePath) => {
-        if (!imagePath) return '';
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        }
-        // Remove any leading slash if present
-        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
-    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -82,17 +72,16 @@ function Italianfood(){
         <div className="itali-card-image" >
             {
                 foodItems.map((item) => (
-                    <div key={item._id} className='Perslide'>
-                        <img src={getImageUrl(item.image)} alt={item.name} onClick={() => detailed(item._id)}></img>
-                        <p>{item.name} [1 serve]</p>
-                        <span style={{display:'block'}}>₹{item.price}</span>
+                    <div key={item.id} className='Perslide'>
+                        <img src={item.url} alt={item.title} onClick={() => detailed(item.id)}></img>
+                        <p>{item.title} [{item.quantity}]</p>
+                        <span style={{display:'block'}}>₹{item.rate}</span>
                         <button className="slide-cart-button" onClick={order}>Order</button>{'  '}
                         <button 
                             className="slide-cart-button" 
                             onClick={() => AddtoCart(item)}
-                            disabled={!item.isAvailable}
                         >
-                            {item.isAvailable ? '+Add toCart' : 'Unavailable'}
+                            +Add toCart
                         </button>
                     </div>
                 ))

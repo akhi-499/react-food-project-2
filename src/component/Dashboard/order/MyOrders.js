@@ -85,9 +85,7 @@ const MyOrders = () => {
         if (imagePath.startsWith('http')) {
             return imagePath;
         }
-        // Remove any leading slash if present
-        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
+        return imagePath; // Return the path as is since we're using static images
     };
 
     if (loading) {
@@ -149,11 +147,11 @@ const MyOrders = () => {
                                     <div className="order-items">
                                         {order.items.map((item) => (
                                             <div key={item.id} className="order-item">
-                                                <img src={getImageUrl(item.image)} alt={item.name} className="item-image" />
+                                                <img src={getImageUrl(item.url)} alt={item.title} className="item-image" />
                                                 <div className="item-details">
-                                                    <h6>{item.name}</h6>
+                                                    <h6>{item.title}</h6>
                                                     <p>Quantity: {item.quantity}</p>
-                                                    <p>Price: ₹{item.price}</p>
+                                                    <p>Price: ₹{item.rate}</p>
                                                 </div>
                                             </div>
                                         ))}

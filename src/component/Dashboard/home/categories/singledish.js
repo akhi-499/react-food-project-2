@@ -1,109 +1,96 @@
 import React, { useState, useEffect } from "react";
+import Footer from "../../footer/footer";
+import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Header from "../../header/header";
-import Footer from "../../footer/footer";
-import '../categories/categories.css';
+import { addTocart } from "../../cart/cartslice";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { addTocart, getTotals } from "../../cart/cartslice";
-import axios from 'axios';
+import { getTotals } from "../../cart/cartslice";
+import Food from "../../../component/foodimage";
 
 function Singledish() {
     const dispatch = useDispatch();
-    const location = useLocation();
     const history = useHistory();
+    const location = useLocation();
     const [detail, setDetail] = useState(null);
     const [loading, setLoading] = useState(true);
     const cart = useSelector((state) => state.cart);
     
     useEffect(() => {
-        fetchFoodItem();
+        loadFoodItem();
     }, [location.search]);
     
     useEffect(() => {
         dispatch(getTotals());
     }, [cart, dispatch]);
     
-    const fetchFoodItem = async () => {
+    const loadFoodItem = () => {
         try {
             const query = new URLSearchParams(location.search);
-            const id = query.get('id');
-            const response = await axios.get(`https://react-food-project-2.onrender.com/api/food-items/${id}`);
-            setDetail(response.data);
+            const itemId = query.get('id');
+            
+            // Find the food item from static data
+            const foodItem = Food.find(item => item.id === parseInt(itemId));
+            setDetail(foodItem);
         } catch (error) {
-            console.error('Error fetching food item:', error);
+            console.error('Error loading food item:', error);
         } finally {
             setLoading(false);
         }
     };
     
-    function AddtoCart(item) {
-        dispatch(addTocart({
-            id: item._id,
-            title: item.name,
-            rate: item.price,
-            url: item.image,
-            quantity: '1 serve',
-            isAvailable: item.isAvailable
-        }));
-    }
-    
     function order() {
         history.push('/cart');
     }
     
-    const getImageUrl = (imagePath) => {
-        if (!imagePath) return '';
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        }
-        // Remove any leading slash if present
-        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
-    };
+    function AddtoCart(item) {
+        dispatch(addTocart({
+            id: item.id,
+            title: item.title,
+            rate: item.rate,
+            url: item.url,
+            quantity: item.quantity,
+            isAvailable: true
+        }));
+    }
     
     if (loading) {
         return <div>Loading...</div>;
     }
     
     if (!detail) {
-        return <div>Food item not found</div>;
+        return <div>Item not found</div>;
     }
     
     return (
         <div className="sfp-bg">
             <Header />
-            <div className="sfp-main">
-                <div className="sfp-first">
-                    <img src={getImageUrl(detail.image)} alt={detail.name} />
-                </div>
-                <div className="spf-second">
-                    <h1>{detail.name}</h1>
-                    <h3>[1 serve]</h3>
-                    <br />
-                    <h1>₹{detail.price}</h1>
-                    <p>
-                        <span>Description:</span><br />
-                        {detail.description}
-                    </p>
-                    <div>
-                        <span>Available Only At:</span>
-                        <p>9am to 9pm</p>
+            <div className="single-dish-container">
+                <div className="single-dish-card">
+                    <img 
+                        src={detail.url} 
+                        alt={detail.title} 
+                    />
+                    <div className="single-dish-details">
+                        <h2>{detail.title}</h2>
+                        <p className="quantity">Quantity: {detail.quantity}</p>
+                        <p className="price">₹{detail.rate}</p>
+                        <p className="description">{detail.description}</p>
+                        <div className="button-container">
+                            <button 
+                                className="order-button" 
+                                onClick={order}
+                            >
+                                Order Now
+                            </button>
+                            <button 
+                                className="add-to-cart-button" 
+                                onClick={() => AddtoCart(detail)}
+                            >
+                                Add to Cart
+                            </button>
+                        </div>
                     </div>
-                    <br />
-                    <button 
-                        onClick={() => AddtoCart(detail)}
-                        disabled={!detail.isAvailable}
-                    >
-                        {detail.isAvailable ? '+ Add to Cart' : 'Unavailable'}
-                    </button>
-                    <button 
-                        style={{marginLeft:'20px'}} 
-                        onClick={order}
-                        disabled={!detail.isAvailable}
-                    >
-                        Order
-                    </button>
                 </div>
             </div>
             <Footer />

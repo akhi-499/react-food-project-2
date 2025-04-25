@@ -6,7 +6,7 @@ import Header from "../header/header";
 import { addTocart } from "../cart/cartslice";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotals } from "../cart/cartslice";
-import axios from 'axios';
+import Food from "../../../component/foodimage";
 
 function Alldish() {
     const dispatch = useDispatch();
@@ -17,26 +17,29 @@ function Alldish() {
     const cart = useSelector((state) => state.cart);
     
     useEffect(() => {
-        fetchFoodItems();
+        loadFoodItems();
     }, [location.search]);
     
     useEffect(() => {
         dispatch(getTotals());
     }, [cart, dispatch]);
     
-    const fetchFoodItems = async () => {
+    const loadFoodItems = () => {
         try {
             const query = new URLSearchParams(location.search);
             const categoryId = query.get('id');
-            const response = await axios.get('https://react-food-project-2.onrender.com/api/food-items');
-            const categoryItems = response.data.filter(item => {
-                if (categoryId === '1') return item.category === 'Breakfast';
-                if (categoryId === '2') return item.category === 'Lunch';
-                return false;
-            });
+            
+            // Filter food items based on category
+            let categoryItems = [];
+            if (categoryId === '1') {
+                categoryItems = Food.filter(item => item.titlename === 'Breakfast');
+            } else if (categoryId === '2') {
+                categoryItems = Food.filter(item => item.titlename === 'Lunch');
+            }
+            
             setDetail(categoryItems);
         } catch (error) {
-            console.error('Error fetching food items:', error);
+            console.error('Error loading food items:', error);
         } finally {
             setLoading(false);
         }
@@ -52,24 +55,14 @@ function Alldish() {
     
     function AddtoCart(item) {
         dispatch(addTocart({
-            id: item._id,
-            title: item.name,
-            rate: item.price,
-            url: item.image,
-            quantity: '1 serve',
-            isAvailable: item.isAvailable
+            id: item.id,
+            title: item.title,
+            rate: item.rate,
+            url: item.url,
+            quantity: item.quantity,
+            isAvailable: true
         }));
     }
-    
-    const getImageUrl = (imagePath) => {
-        if (!imagePath) return '';
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        }
-        // Remove any leading slash if present
-        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
-    };
     
     if (loading) {
         return <div>Loading...</div>;
@@ -80,27 +73,25 @@ function Alldish() {
             <Header />
             <div className="All-dish-card">
                 {detail.map((item) => (
-                    <div key={item._id} className='Perslide'>
+                    <div key={item.id} className='Perslide'>
                         <img 
-                            src={getImageUrl(item.image)} 
-                            alt={item.name} 
-                            onClick={() => detailed(item._id)}
+                            src={item.url} 
+                            alt={item.title} 
+                            onClick={() => detailed(item.id)}
                         />
-                        <p>{item.name} [1 serve]</p>
-                        <span style={{display:'block'}}>₹{item.price}</span>
+                        <p>{item.title} [{item.quantity}]</p>
+                        <span style={{display:'block'}}>₹{item.rate}</span>
                         <button 
                             className="slide-cart-button" 
                             onClick={order}
-                            disabled={!item.isAvailable}
                         >
                             Order
                         </button>
                         <button 
                             className="slide-cart-button" 
                             onClick={() => AddtoCart(item)}
-                            disabled={!item.isAvailable}
                         >
-                            {item.isAvailable ? '+Add toCart' : 'Unavailable'}
+                            +Add toCart
                         </button>
                     </div>
                 ))}

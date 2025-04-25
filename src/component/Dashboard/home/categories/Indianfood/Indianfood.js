@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTocart } from "../../../cart/cartslice";
 import '../../../header/header.css';
-import axios from 'axios';
+import Food from "../../../../component/foodimage";
 
 function Indianfood(){
     const dispatch = useDispatch();
@@ -13,16 +13,16 @@ function Indianfood(){
     let history = useHistory();
     
     useEffect(() => {
-        fetchFoodItems();
+        loadFoodItems();
     }, []);
 
-    const fetchFoodItems = async () => {
+    const loadFoodItems = () => {
         try {
-            const response = await axios.get('https://react-food-project-2.onrender.com/api/food-items');
-            const breakfastItems = response.data.filter(item => item.category === 'Breakfast');
+            // Filter breakfast items from static data
+            const breakfastItems = Food.filter(item => item.titlename === 'Breakfast');
             setFoodItems(breakfastItems);
         } catch (error) {
-            console.error('Error fetching food items:', error);
+            console.error('Error loading food items:', error);
         } finally {
             setLoading(false);
         }
@@ -30,12 +30,12 @@ function Indianfood(){
     
     function AddtoCart(item){
         dispatch(addTocart({
-            id: item._id,
-            title: item.name,
-            rate: item.price,
-            url: item.image,
-            quantity: '1 serve',
-            isAvailable: item.isAvailable
+            id: item.id,
+            title: item.title,
+            rate: item.rate,
+            url: item.url,
+            quantity: item.quantity,
+            isAvailable: true
         }));
     }
 
@@ -51,16 +51,6 @@ function Indianfood(){
         history.push('/cart');
     }
 
-    const getImageUrl = (imagePath) => {
-        if (!imagePath) return '';
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        }
-        // Remove any leading slash if present
-        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
-    };
-
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -72,17 +62,16 @@ function Indianfood(){
                 <div className="card-image">
                     {  
                         foodItems.map((item) => (
-                            <div key={item._id} className='Perslide'>
-                                <img src={getImageUrl(item.image)} alt={item.name} onClick={() => detail(item._id)} />
-                                <p>{item.name} [1 serve]</p>
-                                <span style={{display:'block'}}>₹{item.price}</span>
+                            <div key={item.id} className='Perslide'>
+                                <img src={item.url} alt={item.title} onClick={() => detail(item.id)} />
+                                <p>{item.title} [{item.quantity}]</p>
+                                <span style={{display:'block'}}>₹{item.rate}</span>
                                 <button className="slide-cart-button" onClick={order}>Order</button>
                                 <button 
                                     className="slide-cart-button" 
                                     onClick={() => AddtoCart(item)}
-                                    disabled={!item.isAvailable}
                                 >
-                                    {item.isAvailable ? '+Add toCart' : 'Unavailable'}
+                                    +Add toCart
                                 </button>
                             </div>
                         ))

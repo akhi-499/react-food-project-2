@@ -73,16 +73,6 @@ const AdminDashboard = () => {
     history.push("/admin/login");
   };
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return '';
-    if (imagePath.startsWith('http')) {
-      return imagePath;
-    }
-    // Remove any leading slash if present
-    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-    return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
-  };
-
   if (loading) {
     return (
       <div className="admin-dashboard-container">
@@ -181,14 +171,11 @@ const AdminDashboard = () => {
           ) : (
             <div className="food-items-grid">
               {foodItems.map((item) => (
-                <div key={item._id} className="food-item-card">
-                  <div className="food-item-image">
-                    <img src={getImageUrl(item.image)} alt={item.name} />
-                  </div>
+                <div key={item.id} className="food-item-card">
                   <div className="food-item-details">
-                    <h3>{item.name}</h3>
-                    <p className="food-item-category">{item.category}</p>
-                    <p className="food-item-price">₹{item.price}</p>
+                    <h3>{item.title}</h3>
+                    <p className="food-item-category">{item.titlename}</p>
+                    <p className="food-item-price">₹{item.rate}</p>
                     <p className="food-item-quantity">{item.quantity}</p>
                     <div className="food-item-rating">
                       <span className="star">★</span> {item.star}
