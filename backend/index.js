@@ -22,25 +22,31 @@ if (!process.env.MONGODB_URI) {
     process.exit(1);
 }
 
-// Create two separate connections with SSL configuration
+// Create two separate connections with updated SSL configuration
 const authConnection = mongoose.createConnection(process.env.MONGODB_URI + "/authDB", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     ssl: true,
+    tls: true,
+    tlsAllowInvalidCertificates: false,
+    tlsAllowInvalidHostnames: false,
     retryWrites: true,
     w: 'majority',
-    tlsAllowInvalidCertificates: false,
-    tlsAllowInvalidHostnames: false
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000
 });
 
 const orderConnection = mongoose.createConnection(process.env.MONGODB_URI + "/foodOrderDB", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     ssl: true,
+    tls: true,
+    tlsAllowInvalidCertificates: false,
+    tlsAllowInvalidHostnames: false,
     retryWrites: true,
     w: 'majority',
-    tlsAllowInvalidCertificates: false,
-    tlsAllowInvalidHostnames: false
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000
 });
 
 // Handle authDB connection
