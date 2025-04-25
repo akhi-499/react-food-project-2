@@ -26,8 +26,8 @@ const AdminDashboard = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get("https://react-food-project-2.onrender.com/api/orders/user/all");
-      console.log("Fetched orders from foodOrderDB:", response.data);
       setOrders(response.data);
+      console.log("Fetched orders from test database:", response.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching orders:", error);
@@ -39,8 +39,8 @@ const AdminDashboard = () => {
   const fetchFoodItems = async () => {
     try {
       const response = await axios.get("https://react-food-project-2.onrender.com/api/food-items");
-      console.log("Fetched food items from foodOrderDB:", response.data);
       setFoodItems(response.data);
+      console.log("Fetched food items from test database:", response.data);
     } catch (error) {
       console.error("Error fetching food items:", error);
       toast.error("Failed to load food items. Please try again later.");

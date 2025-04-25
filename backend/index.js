@@ -24,15 +24,14 @@ if (!process.env.MONGODB_URI) {
 }
 
 // Create a single connection to the test database
-const dbConnection = mongoose.createConnection(process.env.MONGODB_URI, {
+const dbConnection = mongoose.connect("mongodb+srv://akshay:akshay123@cluster0.1qgxw.mongodb.net/test?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbName: 'foodOrderDB'  // Explicitly specify the database
 });
 
 // Handle database connection
 dbConnection.on('connected', () => {
-    console.log("Successfully connected to MongoDB (foodOrderDB)");
+    console.log("Successfully connected to MongoDB (test database)");
     // Initialize food items after connection is established
     initializeFoodItems().catch(err => {
         console.error('Error initializing food items:', err);

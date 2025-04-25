@@ -25,7 +25,7 @@ const VendorDashboard = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      console.log("Attempting to fetch orders from foodOrderDB...");
+      console.log("Attempting to fetch orders from test database...");
       
       // Add a timestamp to prevent caching issues
       const response = await axios.get("https://react-food-project-2.onrender.com/api/orders/user/all", {
@@ -37,7 +37,7 @@ const VendorDashboard = () => {
       console.log("Response data:", response.data);
       
       if (response.data && Array.isArray(response.data)) {
-        console.log(`Successfully fetched ${response.data.length} orders from foodOrderDB`);
+        console.log(`Successfully fetched ${response.data.length} orders from test database`);
         setOrders(response.data);
       } else {
         console.error("Invalid response format:", response.data);
