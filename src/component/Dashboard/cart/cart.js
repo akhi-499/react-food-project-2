@@ -24,19 +24,19 @@ function Cart(){
         history.push(`/singledish?id=${id}`)
     }
     
-    function remove(ele){
-        dispatch(removeCartItem(ele))
+    function remove(item){
+        dispatch(removeCartItem(item))
     }
     
-    function decrease(cartitem){
-        dispatch(decreaseCart(cartitem))
+    function decrease(cartItem){
+        dispatch(decreaseCart(cartItem))
     }
     
     function increase(cartItem){
         dispatch(addTocart(cartItem))
     }
     
-    function clearcart(){
+    function clearCart(){
         dispatch(clearCartItem())
     }
     
@@ -132,33 +132,33 @@ function Cart(){
                        </div>
 
                         {
-                            cart.cartItems?.map(cartItems=>(
-                                    <div key={cartItems.id} className="cart-main-body">
+                            cart.cartItems?.map(cartItem=>(
+                                    <div key={cartItem.id} className="cart-main-body">
 
                                      <div className="cart-main-body-div">
-                                        <img src={cartItems.url}   alt={cartItems.title} onClick={()=>detail(cartItems.id)} /> 
+                                        <img src={cartItem.url}   alt={cartItem.title} onClick={()=>detail(cartItem.id)} /> 
                                      <div style={{paddingLeft:'5px'}}>
-                                     <h3 >{cartItems.title}</h3>
-                                     <button onClick={()=>remove(cartItems)}>Delete</button>
+                                     <h3 >{cartItem.title}</h3>
+                                     <button onClick={()=>remove(cartItem)}>Delete</button>
                                      </div>
                                      </div>
 
-                                     <div className="cart-main-body-div2"><h5>₹{cartItems.rate}</h5></div>
+                                     <div className="cart-main-body-div2"><h5>₹{cartItem.rate}</h5></div>
 
                                      <div className="quantity">
-                                        <button onClick={()=>decrease(cartItems)}>-</button><span>{cartItems.cartQuantity}</span>
-                                        <button onClick={()=>increase(cartItems)}>+</button>
+                                        <button onClick={()=>decrease(cartItem)}>-</button><span>{cartItem.cartQuantity}</span>
+                                        <button onClick={()=>increase(cartItem)}>+</button>
                                      </div>
 
                                      <div className="cart-main-body-div2">
-                                        <div style={{color:'green',fontSize:'23px'}}>₹{cartItems.cartQuantity*cartItems.rate} </div>
+                                        <div style={{color:'green',fontSize:'23px'}}>₹{cartItem.cartQuantity*cartItem.rate} </div>
                                      </div>
                                     </div>
                             ))
                         }
                         <div style={{display:'flex',justifyContent:'space-between',width:'1100px',marginLeft:'10px'}}>
                             <div>
-                               <button className="clearCart-button" onClick={()=>clearcart()}> Clear cart </button>
+                               <button className="clearCart-button" onClick={()=>clearCart()}> Clear cart </button>
                             </div>
                             <div>
                                 <p>Subtotal <span style={{fontSize:'12px'}}>*including all taxes*</span>: <b><span style={{fontSize:'23px'}}> ₹{cart.totalAmount}/-</span></b></p>

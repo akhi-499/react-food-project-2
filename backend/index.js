@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
+const path = require("path");
 require('dotenv').config();
 
 const app = express();
@@ -10,6 +11,9 @@ app.use(cors({
     credentials: true 
 }));
 app.use(express.json());
+
+// Serve static files from the public directory
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 // Connect to MongoDB with detailed error logging
 console.log("Attempting to connect to MongoDB...");
@@ -205,7 +209,7 @@ const initializeFoodItems = async () => {
                     name: 'Idly',
                     description: 'Soft and fluffy steamed rice cakes, a perfect healthy South Indian breakfast.',
                     price: 50,
-                    image: '/src/component/Dashboard/image/Indfood-1.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-1.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -214,7 +218,7 @@ const initializeFoodItems = async () => {
                     name: 'Dosa',
                     description: 'Crispy and golden rice crepe, served with chutney and sambar for a flavorful bite.',
                     price: 100,
-                    image: '/src/component/Dashboard/image/Indfood-2.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-2.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -223,7 +227,7 @@ const initializeFoodItems = async () => {
                     name: 'Puri',
                     description: 'Deep-fried, puffy Indian bread, best enjoyed with potato curry or chickpea masala.',
                     price: 100,
-                    image: '/src/component/Dashboard/image/Indfood-3.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-3.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -232,7 +236,7 @@ const initializeFoodItems = async () => {
                     name: 'Upma',
                     description: 'A warm and savory semolina dish, cooked with vegetables and spices for a comforting meal.',
                     price: 100,
-                    image: '/src/component/Dashboard/image/Indfood-4.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/Indfood-4.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
                     vendorId: vendorId
@@ -241,7 +245,7 @@ const initializeFoodItems = async () => {
                     name: 'Dal Rice',
                     description: 'A comforting combination of lentil curry and steamed rice, packed with flavor and nutrition.',
                     price: 100,
-                    image: '/src/component/Dashboard/image/dal_rice.png',
+                    image: 'https://react-food-project-2.onrender.com/images/dal_rice.png',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId
@@ -250,7 +254,7 @@ const initializeFoodItems = async () => {
                     name: 'Fried Rice',
                     description: 'A delicious stir-fried rice dish with veggies, spices, and aromatic seasonings.',
                     price: 150,
-                    image: '/src/component/Dashboard/image/fried_rice.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/fried_rice.jpg',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId
@@ -259,7 +263,7 @@ const initializeFoodItems = async () => {
                     name: 'Roti Sabji',
                     description: 'Soft whole wheat flatbread served with a flavorful vegetable curry.',
                     price: 100,
-                    image: '/src/component/Dashboard/image/roti_sabji.jpeg',
+                    image: 'https://react-food-project-2.onrender.com/images/roti_sabji.jpeg',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId
@@ -268,7 +272,7 @@ const initializeFoodItems = async () => {
                     name: 'Pulav',
                     description: 'Fragrant and mildly spiced rice cooked with vegetables and aromatic spices.',
                     price: 175,
-                    image: '/src/component/Dashboard/image/pulao.jpg',
+                    image: 'https://react-food-project-2.onrender.com/images/pulao.jpg',
                     category: 'Lunch',
                     isAvailable: true,
                     vendorId: vendorId

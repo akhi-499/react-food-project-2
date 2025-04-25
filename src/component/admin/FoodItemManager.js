@@ -13,8 +13,9 @@ const FoodItemManager = () => {
     description: '',
     price: '',
     category: '',
-    imageUrl: '',
-    isAvailable: true
+    image: '',
+    isAvailable: true,
+    vendorId: '65f1a1b1c4d5e6f7a8b9c0d1e' // Using the vendorId from the logs
   });
 
   useEffect(() => {
@@ -23,12 +24,11 @@ const FoodItemManager = () => {
 
   const fetchFoodItems = async () => {
     try {
-      setLoading(true);
       const response = await axios.get('https://react-food-project-2.onrender.com/api/food-items');
       setFoodItems(response.data);
     } catch (error) {
       console.error('Error fetching food items:', error);
-      toast.error('Failed to load food items');
+      toast.error('Failed to fetch food items');
     } finally {
       setLoading(false);
     }
@@ -45,11 +45,21 @@ const FoodItemManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Ensure image URL is absolute
+      const imageUrl = formData.image.startsWith('http') 
+        ? formData.image 
+        : `https://react-food-project-2.onrender.com/images/${formData.image.split('/').pop()}`;
+
+      const updatedFormData = {
+        ...formData,
+        image: imageUrl
+      };
+
       if (editingItem) {
-        await axios.patch(`https://react-food-project-2.onrender.com/api/food-items/${editingItem._id}`, formData);
+        await axios.put(`https://react-food-project-2.onrender.com/api/food-items/${editingItem._id}`, updatedFormData);
         toast.success('Food item updated successfully');
       } else {
-        await axios.post('https://react-food-project-2.onrender.com/api/food-items', formData);
+        await axios.post('https://react-food-project-2.onrender.com/api/food-items', updatedFormData);
         toast.success('Food item added successfully');
       }
       fetchFoodItems();
@@ -67,8 +77,9 @@ const FoodItemManager = () => {
       description: item.description,
       price: item.price,
       category: item.category,
-      imageUrl: item.imageUrl,
-      isAvailable: item.isAvailable
+      image: item.image,
+      isAvailable: item.isAvailable,
+      vendorId: item.vendorId
     });
   };
 
@@ -85,15 +96,21 @@ const FoodItemManager = () => {
     }
   };
 
-  const handleToggleAvailability = async (id, currentStatus) => {
+  const toggleAvailability = async (itemId, currentStatus) => {
     try {
-      await axios.patch(`https://react-food-project-2.onrender.com/api/food-items/${id}`, {
+      await axios.patch(`https://react-food-project-2.onrender.com/api/food-items/${itemId}/availability`, {
         isAvailable: !currentStatus
       });
-      toast.success('Food item availability updated');
-      fetchFoodItems();
+      setFoodItems(items => 
+        items.map(item => 
+          item._id === itemId 
+            ? { ...item, isAvailable: !currentStatus }
+            : item
+        )
+      );
+      toast.success('Food item availability updated successfully');
     } catch (error) {
-      console.error('Error updating food item availability:', error);
+      console.error('Error updating food item:', error);
       toast.error('Failed to update food item availability');
     }
   };
@@ -105,8 +122,9 @@ const FoodItemManager = () => {
       description: '',
       price: '',
       category: '',
-      imageUrl: '',
-      isAvailable: true
+      image: '',
+      isAvailable: true,
+      vendorId: '65f1a1b1c4d5e6f7a8b9c0d1e'
     });
   };
 
@@ -164,15 +182,19 @@ const FoodItemManager = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="imageUrl">Image URL:</label>
+          <label htmlFor="image">Image URL:</label>
           <input
             type="url"
-            id="imageUrl"
-            name="imageUrl"
-            value={formData.imageUrl}
+            id="image"
+            name="image"
+            value={formData.image}
             onChange={handleInputChange}
             required
+            placeholder="Enter full URL or just the filename (e.g., Indfood-1.jpg)"
           />
+          <small className="form-text text-muted">
+            You can enter a full URL or just the filename. If you enter just the filename, it will be automatically converted to a full URL.
+          </small>
         </div>
         <div className="form-group">
           <label htmlFor="isAvailable">
@@ -203,7 +225,7 @@ const FoodItemManager = () => {
         {foodItems.map((item) => (
           <div key={item._id} className="food-item-card">
             <div className="food-item-image">
-              <img src={item.imageUrl} alt={item.name} />
+              <img src={item.image} alt={item.name} />
             </div>
             <div className="food-item-details">
               <h3>{item.name}</h3>
@@ -219,7 +241,7 @@ const FoodItemManager = () => {
                 <button onClick={() => handleEdit(item)} className="edit-button">
                   Edit
                 </button>
-                <button onClick={() => handleToggleAvailability(item._id, item.isAvailable)} className="toggle-button">
+                <button onClick={() => toggleAvailability(item._id, item.isAvailable)} className="toggle-button">
                   {item.isAvailable ? 'Mark Unavailable' : 'Mark Available'}
                 </button>
                 <button onClick={() => handleDelete(item._id)} className="delete-button">
