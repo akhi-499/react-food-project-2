@@ -26,7 +26,7 @@ const foodItemSchema = new mongoose.Schema({
         default: true
     },
     vendorId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true
     }
 }, {

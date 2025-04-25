@@ -22,12 +22,17 @@ if (!process.env.MONGODB_URI) {
 // Create a single connection to the test database
 const dbConnection = mongoose.createConnection(process.env.MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    dbName: 'foodOrderDB'  // Explicitly specify the database
 });
 
 // Handle database connection
 dbConnection.on('connected', () => {
-    console.log("Successfully connected to MongoDB (test database)");
+    console.log("Successfully connected to MongoDB (foodOrderDB)");
+    // Initialize food items after connection is established
+    initializeFoodItems().catch(err => {
+        console.error('Error initializing food items:', err);
+    });
 });
 
 dbConnection.on('error', (err) => {
@@ -183,10 +188,18 @@ const foodItemRoutes = require('./routes/foodItemRoutes')(dbConnection);
 // Initialize food items
 const initializeFoodItems = async () => {
     try {
+        console.log('Starting food items initialization...');
         const FoodItem = dbConnection.model('FoodItem', require('./models/FoodItem'));
+        console.log('FoodItem model created');
+        
         const existingItems = await FoodItem.find();
+        console.log('Existing items count:', existingItems.length);
         
         if (existingItems.length === 0) {
+            console.log('No existing items found, starting insertion...');
+            const vendorId = '65f1a1b1c4d5e6f7a8b9c0d1e';  // Hardcoded vendorId
+            console.log('Using vendorId:', vendorId);
+            
             const foodItems = [
                 {
                     name: 'Idly',
@@ -195,7 +208,7 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/Indfood-1.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 },
                 {
                     name: 'Dosa',
@@ -204,7 +217,7 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/Indfood-2.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 },
                 {
                     name: 'Puri',
@@ -213,7 +226,7 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/Indfood-3.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 },
                 {
                     name: 'Upma',
@@ -222,7 +235,7 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/Indfood-4.jpg',
                     category: 'Breakfast',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 },
                 {
                     name: 'Dal Rice',
@@ -231,7 +244,7 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/dal_rice.png',
                     category: 'Lunch',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 },
                 {
                     name: 'Fried Rice',
@@ -240,7 +253,7 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/fried_rice.jpg',
                     category: 'Lunch',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 },
                 {
                     name: 'Roti Sabji',
@@ -249,7 +262,7 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/roti_sabji.jpeg',
                     category: 'Lunch',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 },
                 {
                     name: 'Pulav',
@@ -258,25 +271,23 @@ const initializeFoodItems = async () => {
                     image: '/src/component/Dashboard/image/pulao.jpg',
                     category: 'Lunch',
                     isAvailable: true,
-                    vendorId: '65f1a1b1c4d5e6f7g8h9i0j1'
+                    vendorId: vendorId
                 }
             ];
             
-            await FoodItem.insertMany(foodItems);
-            console.log('Food items initialized successfully');
+            const result = await FoodItem.insertMany(foodItems);
+            console.log('Food items initialized successfully:', result.length, 'items inserted');
         } else {
             console.log('Food items already exist in the database');
         }
     } catch (error) {
         console.error('Error initializing food items:', error);
+        console.error('Error details:', error.message);
+        if (error.errors) {
+            console.error('Validation errors:', error.errors);
+        }
     }
 };
-
-// Call initializeFoodItems after database connection is established
-dbConnection.once('open', () => {
-    console.log('Connected to MongoDB');
-    initializeFoodItems();
-});
 
 // Use routes
 app.use("/", router);
