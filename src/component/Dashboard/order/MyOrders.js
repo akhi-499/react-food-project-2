@@ -7,6 +7,7 @@ import { updateOrderStatus, setOrders, removeOrder } from '../../../redux/orderS
 import { toast } from 'react-toastify';
 import { getUserOrders, updateOrderStatus as updateOrderStatusApi, deleteOrder } from '../../../services/orderService';
 import './MyOrders.css';
+import Food from "../../../data/foodimage";
 
 const MyOrders = () => {
     const orders = useSelector((state) => state.orders.orders);

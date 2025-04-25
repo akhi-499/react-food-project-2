@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./AdminDashboard.css";
 import FoodItemManager from "./FoodItemManager";
+import Food from "../../data/foodimage";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);

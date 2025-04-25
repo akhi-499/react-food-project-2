@@ -3,7 +3,7 @@ import '../categories.css'
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTocart } from "../../../cart/cartslice";
-import Food from "../../../../../../component/foodimage";
+import Food from "../../../../../data/foodimage";
 
 function Italianfood(){
     const dispatch = useDispatch();

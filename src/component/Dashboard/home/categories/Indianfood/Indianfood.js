@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTocart } from "../../../cart/cartslice";
 import '../../../header/header.css';
-import Food from "../../../../../../component/foodimage";
+import Food from "../../../../../data/foodimage";
 
 function Indianfood(){
     const dispatch = useDispatch();

@@ -1,0 +1,1 @@
+import Food from "../../../data/foodimage"; 
