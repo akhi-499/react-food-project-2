@@ -114,12 +114,7 @@ function Cart(){
     
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '';
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        }
-        // Remove any leading slash if present
-        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-        return `https://react-food-project-2.onrender.com/images/${cleanPath}`;
+        return imagePath; // Return the path as is since we're using static images
     };
     
     return(
@@ -130,7 +125,6 @@ function Cart(){
                 cart.cartItems.length===0 ?(
                     <div style={{marginBottom:'165px',padding:'10px'}}>
                         <p>Your cart is currently empty</p>
-                        
                     </div>
                 ) :(
                     <div className="cart-main">
@@ -142,13 +136,12 @@ function Cart(){
                        </div>
 
                         {
-                            cart.cartItems?.map(cartItem=>(
+                            cart.cartItems.map((cartItem) => (
                                     <div key={cartItem.id} className="cart-main-body">
-
                                      <div className="cart-main-body-div">
-                                        <img src={getImageUrl(cartItem.url)}   alt={cartItem.title} onClick={()=>detail(cartItem.id)} /> 
+                                        <img src={getImageUrl(cartItem.url)} alt={cartItem.title} onClick={()=>detail(cartItem.id)} /> 
                                      <div style={{paddingLeft:'5px'}}>
-                                     <h3 >{cartItem.title}</h3>
+                                     <h3>{cartItem.title}</h3>
                                      <button onClick={()=>remove(cartItem)}>Delete</button>
                                      </div>
                                      </div>

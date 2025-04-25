@@ -83,9 +83,6 @@ const MyOrders = () => {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '';
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        }
         return imagePath; // Return the path as is since we're using static images
     };
 
@@ -147,7 +144,7 @@ const MyOrders = () => {
                                 <Card.Body>
                                     <div className="order-items">
                                         {order.items.map((item) => (
-                                            <div key={item.id} className="order-item">
+                                            <div key={item._id} className="order-item">
                                                 <img src={getImageUrl(item.url)} alt={item.title} className="item-image" />
                                                 <div className="item-details">
                                                     <h6>{item.title}</h6>
@@ -164,7 +161,7 @@ const MyOrders = () => {
                                         </div>
                                         <div className="d-flex justify-content-between">
                                             <span>Order Date:</span>
-                                            <span>{new Date(order.orderDate).toLocaleDateString()}</span>
+                                            <span>{new Date(order.createdAt).toLocaleDateString()}</span>
                                         </div>
                                     </div>
                                 </Card.Body>
