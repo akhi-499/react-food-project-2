@@ -26,9 +26,9 @@ function Home() {
             <Header />
             <div className="bg">
                 
-                <div className="main-slice">
+                {/* <div className="main-slice">
                     <Imageslide slides={slides} />
-                </div>
+                </div> */}
             </div>
             {/* <Categories /> */}
             <div className="categories">
