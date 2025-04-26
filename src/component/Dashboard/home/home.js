@@ -24,17 +24,18 @@ function Home() {
     return (
         <div className="home">
             <Header />
-            <div className="bg">
-                
-                {/* <div className="main-slice">
-                    <Imageslide slides={slides} />
-                </div> */}
-            </div>
             {/* <Categories /> */}
             <div className="categories">
                 <Lunch />
                 <Italianfood />
             </div>
+            {/* <div className="bg">
+                
+                <div className="main-slice">
+                    <Imageslide slides={slides} />
+                </div>
+            </div> */}
+            
 
 
             <Footer />
