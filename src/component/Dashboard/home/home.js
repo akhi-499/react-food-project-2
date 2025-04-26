@@ -17,10 +17,10 @@ function Home() {
     useEffect(() => {
         dispatch(getTotals())
     }, [cart, dispatch])
-    const slides = [
-        { url: require("../image/carousel.webp"), title: 'slide1' }
+    // const slides = [
+    //     { url: require("../image/carousel.webp"), title: 'slide1' }
 
-    ]
+    // ]
     return (
         <div className="home">
             <Header />
